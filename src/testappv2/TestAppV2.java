@@ -6,56 +6,66 @@
 package testappv2;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import testappv2.config;
 
 
 public class TestAppV2 {
-//Connection Method to SQLITE
-public static Connection connectDB() {
-        Connection con = null;
-        try {
-            Class.forName("org.sqlite.JDBC"); // Load the SQLite JDBC driver
-            con = DriverManager.getConnection("jdbc:sqlite:appcarlo.db"); // Establish connection
-            System.out.println("Connection Successful");
-        } catch (Exception e) {
-            System.out.println("Connection Failed: " + e);
-        }
-        return con;
-    }
-  
-    public static void main(String[] args) {
+
+ 
+
+
+    public void addStudents(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter ID: ");
-        int id = sc.nextInt();
-        System.out.println("Student first name:");
+        config conf = new config();
+        System.out.print("Patient First Name: ");
         String fname = sc.next();
-        System.out.println("Student last name:");
+        System.out.print("Patient Last Name: ");
         String lname = sc.next();
-        System.out.println("Student email name:");
-        String email = sc.next();
-        System.out.println("Student status name:");
-        String status = sc.next();
+        System.out.print("Patient Age: ");
+        String age = sc.next();
+        System.out.print("Patient Gender: ");
+        String gender = sc.next();
         
-        String sql = "INSERT INTO Student (s_id, s_fname, s_lname, s_email, s_status) VALUES(?, ?, ?, ?, ?)";
-          try{ 
-          Connection con = connectDB();
-          PreparedStatement pst = con.prepareStatement(sql);
-          pst.setInt(1, id);
-          pst.setString(2, fname);
-          pst.setString(3, lname);
-          pst.setString(4, email);
-          pst.setString(5, status);
-          pst.executeUpdate();
-              System.out.println("Inserted Successfully!");
-          } catch (SQLException e){
-              System.out.println("Connection error"+e.getMessage());
-          
-          }
-    }
+        String sql = "INSERT INTO tbl_patients (s_fname, s_lname, s_email, s_status) VALUES (?, ?, ?, ?)";
+
+        
+        conf.addRecord(sql, fname, lname, age, gender);
+        
     
+    }
+
+    public void viewStudents() {
+        String sql = "SELECT * FROM Student";
+        config conf = new config();
+        try (Connection conn = conf.connectDB(); // Use the connectDB method
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.printf("| %-5s | %-20s | %-12s | %-25s | %-10s |\n", "ID", "Firstname", "LastNAme", "Age", "Gender");
+            System.out.println("--------------------------------------------------------------------------------");
+
+            while (rs.next()) {
+                int id = rs.getInt("s_id");
+                String fname = rs.getString("p_fname");
+                String lname = rs.getString("p_lname");
+                String age = rs.getString("p_age");
+                String gender = rs.getString("p_gender");
+                System.out.printf("| %-5d | %-20s | %-12s | %-25s | %-10s |\n", id, fname, lname, age, gender);
+            }
+
+            System.out.println("--------------------------------------------------------------------------------");
+        } catch (SQLException e) {
+            System.out.println("Error retrieving citizens: " + e.getMessage());
+        }
+    }
+
+
+
 }
 
 
