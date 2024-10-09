@@ -7,7 +7,8 @@ package testappv2;
 
 import java.util.Scanner;
 
-public class main {
+
+    public class main {
 
     public static void main(String[] args) {
         TestAppV2 app = new TestAppV2();
@@ -15,9 +16,11 @@ public class main {
         
         while (true) {
             System.out.println("Welcome to the Patient Management System");
-            System.out.println("1. Add Patient");
-            System.out.println("2. View Patients");
-            System.out.println("3. Exit");
+            System.out.println("1. Add Patient Record");
+            System.out.println("2. View Patients Record");
+            System.out.println("3. Update Patient Record");
+            System.out.println("4. Delete Record");
+            System.out.println("5. Exit");
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
@@ -25,13 +28,21 @@ public class main {
             
             switch (choice) {
                 case 1:
-                    app.addStudents();
+                    app.addPatients();
                     break;
                 case 2:
-                    app.viewStudents();
+                    app.viewPatients();
                     break;
                 case 3:
-                    System.out.println("Exiting...");
+                    app.viewPatients();
+                    app.updatePatients();
+                       break;
+                case 4: 
+                    app.viewPatients();
+                    app.deleteRecord();
+                    break;
+                case 5:  
+                System.out.println("Exiting...");
                     scanner.close();
                     return; // Exit the loop and terminate the program
                 default:
