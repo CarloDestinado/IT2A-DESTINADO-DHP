@@ -1,111 +1,113 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package testappv2;
+package TestAppV2;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Scanner;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
-
-
 
 public class TestAppV2 {
+    
+   
+    public static void main(String[] args) {
+        
+        Scanner sc = new Scanner(System.in);
+        String resp;
+        do{
 
+            System.out.println("1. ADD");
+            System.out.println("2. VIEW");
+            System.out.println("3. UPDATE");
+            System.out.println("4. DELETE");
+            System.out.println("5. EXIT");
 
+            System.out.print("Enter Action: ");
+            int action = sc.nextInt();
+            TestAppV2 test = new TestAppV2();
+            switch(action){
+                case 1:
+                    test.addEmployee();
+                break;
+                case 2:
+                    test.viewEmployee();
+                break;
+                case 3:
+                    test.viewEmployee();
+                    test.updateEmployee();
+                break;
+                case 4:
+                    test.viewEmployee();
+                    test.deleteEmployee();
+                    test.viewEmployee();
+                break;
+            }
+            
+            System.out.print("Continue? ");
+            resp = sc.next();
 
-    public void addPatients(){
+        }while(resp.equalsIgnoreCase("yes"));
+            System.out.println("Thank You!");
+
+    }
+    
+    public void addEmployee(){
         Scanner sc = new Scanner(System.in);
         config conf = new config();
-        System.out.print("Patient First Name: ");
-        String fname = sc.next();
-        System.out.print("Patient Last Name: ");
-        String lname = sc.next();
-        System.out.print("Patient Age: ");
-        String age = sc.next();
-        System.out.print("Patient Gender: ");
-        String gender = sc.next();
-        
-        String sql = "INSERT INTO tbl_patients (p_fname, p_lname, p_age, p_gender) VALUES (?, ?, ?, ?)";
+        System.out.print("Employee First Name: ");
+        String fname = sc.nextLine();
+        System.out.print("Employee Last Name: ");
+        String lname = sc.nextLine();
+        System.out.print("Employee Email: ");
+        String email = sc.nextLine();
+        System.out.print("Employee Status: ");
+        String status = sc.nextLine();
 
-        
-        conf.addRecord(sql, fname, lname, age, gender);
-        
-    
+        String sql = "INSERT INTO tbl_employees (e_fname, e_lname, e_email, e_status) VALUES (?, ?, ?, ?)";
+
+
+        conf.addRecord(sql, fname, lname, email, status);
     }
-   
+    
+    private void viewEmployee() {
+        
+        String qry = "SELECT * FROM tbl_employees";
+        String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Status"};
+        String[] clms = {"e_id", "e_fname", "e_lname", "e_email", "e_status"};
 
-    public void viewPatients() {
-        String sql = "SELECT * FROM tbl_patients";
         config conf = new config();
-        try (Connection conn = conf.connectDB(); // Use the connectDB method
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            System.out.println("--------------------------------------------------------------------------------");
-            System.out.printf("| %-5s | %-20s | %-12s | %-25s |\n", "Firstname", "Lastname", "Age", "Gender");
-            System.out.println("--------------------------------------------------------------------------------");
-
-            while (rs.next()) {
-                String p_fname = rs.getString("p_fname");
-                String p_lname = rs.getString("p_lname");
-                int p_age = rs.getInt("p_age");
-                String p_gender = rs.getString("p_gender");
-                System.out.printf("| %-20s | %-12s | %-25d | %-10s |\n", p_fname, p_lname, p_age, p_gender);
-            }
-
-            System.out.println("--------------------------------------------------------------------------------");
-        } catch (SQLException e) {
-            System.out.println("Error retrieving citizens: " + e.getMessage());
-        }
+        conf.viewRecords(qry, hdrs, clms);
     }
-
-    private Connection connectDB() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    private void updateEmployee(){
+    
+        Scanner sc= new Scanner(System.in);
+        System.out.print("Enter the ID to Update: ");
+        int id = sc.nextInt();
+        
+        System.out.print("Enter new First Name: ");
+        String nfname = sc.next();
+        System.out.print("Enter new Last Name: ");
+        String nlname = sc.next();
+        System.out.print("Enter new Email: ");
+        String nemail = sc.next();
+        System.out.print("Enter new Status: ");
+        String nstatus = sc.next();
+        
+        String qry = "UPDATE tbl_employees SET e_fname = ?, e_lname = ?, e_email = ?, e_status = ? WHERE e_id = ?";
+        
+        config conf = new config();
+        conf.updateRecord(qry, nfname, nlname, nemail, nstatus, id);
+        
     }
-
- public void updatePatients() {
-    Scanner sc = new Scanner(System.in);
-    System.out.print("Enter the Patient ID to Update: ");
     
-    int id = sc.nextInt(); // Fixed syntax here
-
-    System.out.print("Enter new First Name: ");
-    String nfname = sc.next();
+    private void deleteEmployee(){
+        
+        Scanner sc= new Scanner(System.in);
+        System.out.print("Enter the ID to Delete: ");
+        int id = sc.nextInt();
+        
+        String qry = "DELETE FROM tbl_employees WHERE e_id = ?";
+        
+        config conf = new config();
+        conf.deleteRecord(qry, id);
     
-    System.out.print("Enter new Last Name: ");
-    String nlname = sc.next();
-    
-    System.out.print("Enter new Age: ");
-    int nage = sc.nextInt(); // Changed to int for age
-    
-    System.out.print("Enter new Gender: ");
-    String ngender = sc.next();
-
-    String qry = "UPDATE tbl_patients SET p_fname = ?, p_lname = ?, p_age = ?, p_gender = ? WHERE p_id = ?"; // Corrected SQL syntax
-    
-    Config conf = new Config() {}; // Ensure Config class is capitalized
-    conf.updatePatients(qry, nfname, nlname, nage, ngender, id); // Make sure your method accepts these parameters correctly
-}
-
-public void deletePatients() {
-    Scanner sc = new Scanner(System.in);
-    System.out.print("Enter the Patient ID to Delete: ");
-    
-    int id = sc.nextInt();
-    String qry = "DELETE FROM tbl_patients WHERE p_id = ?"; // Corrected SQL syntax
-    Config conf = new Config() {}; // Ensure Config class is capitalized
-    conf.deleteRecord(qry, id); // Ensure your method accepts this parameter correctly
-}
-
-    void deleteRecord() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    
 }
-
-
