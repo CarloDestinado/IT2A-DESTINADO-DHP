@@ -1,8 +1,9 @@
-package TestAppV2;
+package testappv2;
 
+import TestAppV2.config;
 import java.util.Scanner;
 
-public class TestAppV2 {
+public class TestAppV2A {
     
    
     public static void main(String[] args) {
@@ -19,7 +20,7 @@ public class TestAppV2 {
 
             System.out.print("Enter Action: ");
             int action = sc.nextInt();
-            TestAppV2 test = new TestAppV2();
+            TestAppV2A test = new TestAppV2A();
             switch(action){
                 case 1:
                     test.addEmployee();
