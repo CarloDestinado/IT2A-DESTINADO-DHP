@@ -1,4 +1,4 @@
-package TestAppV2;
+package testappv2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,7 @@ public static Connection connectDB() {
         return con;
     }
     
-    public void addRecord(String sql, Object... values) {
+    public void addDHP(String sql, Object... values) {
     try (Connection conn = this.connectDB(); // Use the connectDB method
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -61,7 +61,7 @@ public static Connection connectDB() {
     //---------------------------------------------------------------------------------------------------------------
     
      
-    public void viewRecords(String sqlQuery, String[] columnHeaders, String[] columnNames) {
+    public void viewDHP(String sqlQuery, String[] columnHeaders, String[] columnNames) {
         // Check that columnHeaders and columnNames arrays are the same length
         if (columnHeaders.length != columnNames.length) {
             System.out.println("Error: Mismatch between column headers and column names.");
@@ -103,7 +103,7 @@ public static Connection connectDB() {
     // UPDATE METHOD
     //-----------------------------------------------
 
-    public void updateRecord(String sql, Object... values) {
+    public void updateDHP(String sql, Object... values) {
         try (Connection conn = this.connectDB(); // Use the connectDB method
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -143,7 +143,7 @@ public static Connection connectDB() {
     //-----------------------------------------------
 
     // Add this method in the config class
-public void deleteRecord(String sql, Object... values) {
+public void deleteDHP(String sql, Object... values) {
     try (Connection conn = this.connectDB();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
