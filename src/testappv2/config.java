@@ -22,7 +22,7 @@ public static Connection connectDB() {
         return con;
     }
     
-    public void addDHP(String sql, Object... values) {
+    public void addpatient(String sql, Object... values) {
     try (Connection conn = this.connectDB(); // Use the connectDB method
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -61,7 +61,7 @@ public static Connection connectDB() {
     //---------------------------------------------------------------------------------------------------------------
     
      
-    public void viewDHP(String sqlQuery, String[] columnHeaders, String[] columnNames) {
+    public void viewpatient(String sqlQuery, String[] columnHeaders, String[] columnNames) {
         // Check that columnHeaders and columnNames arrays are the same length
         if (columnHeaders.length != columnNames.length) {
             System.out.println("Error: Mismatch between column headers and column names.");
@@ -103,7 +103,7 @@ public static Connection connectDB() {
     // UPDATE METHOD
     //-----------------------------------------------
 
-    public void updateDHP(String sql, Object... values) {
+    public void updatepatient(String sql, Object... values) {
         try (Connection conn = this.connectDB(); // Use the connectDB method
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -143,7 +143,7 @@ public static Connection connectDB() {
     //-----------------------------------------------
 
     // Add this method in the config class
-public void deleteDHP(String sql, Object... values) {
+public void deletepatient(String sql, Object... values) {
     try (Connection conn = this.connectDB();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -161,7 +161,53 @@ public void deleteDHP(String sql, Object... values) {
     } catch (SQLException e) {
         System.out.println("Error deleting record: " + e.getMessage());
     }
-}
+} //-----------------------------------------------
+    // Helper Method for Setting PreparedStatement Values
+    //-----------------------------------------------
+    private void setPreparedStatementValues(PreparedStatement pstmt, Object... values) throws SQLException {
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] instanceof Integer) {
+                pstmt.setInt(i + 1, (Integer) values[i]);
+            } else if (values[i] instanceof Double) {
+                pstmt.setDouble(i + 1, (Double) values[i]);
+            } else if (values[i] instanceof Float) {
+                pstmt.setFloat(i + 1, (Float) values[i]);
+            } else if (values[i] instanceof Long) {
+                pstmt.setLong(i + 1, (Long) values[i]);
+            } else if (values[i] instanceof Boolean) {
+                pstmt.setBoolean(i + 1, (Boolean) values[i]);
+            } else if (values[i] instanceof java.util.Date) {
+                pstmt.setDate(i + 1, new java.sql.Date(((java.util.Date) values[i]).getTime()));
+            } else if (values[i] instanceof java.sql.Date) {
+                pstmt.setDate(i + 1, (java.sql.Date) values[i]);
+            } else if (values[i] instanceof java.sql.Timestamp) {
+                pstmt.setTimestamp(i + 1, (java.sql.Timestamp) values[i]);
+            } else {
+                pstmt.setString(i + 1, values[i].toString());
+            }
+        }
+    }
+
+  //-----------------------------------------------
+    // GET SINGLE VALUE METHOD
+    //-----------------------------------------------
+
+    public double getSingleValue(String sql, Object... params) {
+        double result = 0.0;
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            setPreparedStatementValues(pstmt, params);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                result = rs.getDouble(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving single value: " + e.getMessage());
+        }
+        return result;
+    }
     
     
 }

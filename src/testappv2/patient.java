@@ -2,43 +2,43 @@ package testappv2;
 
 import java.util.Scanner;
 
-public class DHP{
+public class patient{
 
-    public static void main(String[] args) {
+    public void pinformation(){
         Scanner sc = new Scanner(System.in);
         String resp;
        
-        DHP test = new DHP();  // Create a single instance for the main menu
+        patient test = new patient(); 
 
         do {
-            System.out.println("1. ADD");
-            System.out.println("2. VIEW");
-            System.out.println("3. UPDATE");
-            System.out.println("4. DELETE");
+            System.out.println("1. ADD PATIENT");
+            System.out.println("2. VIEW PATIENT");
+            System.out.println("3. UPDATE PATIENT");
+            System.out.println("4. DELETE PATIENT");
             System.out.println("5. EXIT");
 
-            System.out.print("Enter Action: ");
+            System.out.print("\nEnter Action: ");
             int action = sc.nextInt();
-            sc.nextLine();  // Consume the newline character
+            sc.nextLine();
 
             switch (action) {
                 case 1:
-                    test.addDHP();
+                    test.addpatient();
                     break;
                 case 2:
-                    test.viewDHP();
+                    test.viewpatient();
                     break;
                 case 3:
-                    test.viewDHP();
-                    test.updateDHP();
+                    test.viewpatient();
+                    test.updatepatient();
                     break;
                 case 4:
-                    test.viewDHP();
-                    test.deleteDHP();
+                    test.viewpatient();
+                    test.deletepatient();
                     break;
                 case 5:
                     System.out.println("Exiting...");
-                    return;  // Exit the program
+                    return; 
                 default:
                     System.out.println("Invalid action. Please choose again.");
             }
@@ -50,10 +50,10 @@ public class DHP{
         System.out.println("Thank You!");
     }
     
-    public void addDHP() {
+    public void addpatient() {
         Scanner sc = new Scanner(System.in);
         config conf = new config();
-        System.out.print("Patient First Name: ");
+        System.out.print("\nPatient First Name: ");
         String fname = sc.nextLine();
         System.out.print("Patient Last Name: ");
         String lname = sc.nextLine();
@@ -66,25 +66,32 @@ public class DHP{
 
         String sql = "INSERT INTO tbl_patients(patient_fname, patient_lname, email, address, status) VALUES (?, ?, ?, ?, ?)";
        
-        conf.addDHP(sql, fname, lname, email, address, status);
+        conf.addpatient(sql, fname, lname, email, address, status);
     }
     
-    private void viewDHP() {
+    private void viewpatient() {
         String qry = "SELECT * FROM tbl_patients";
         String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Address", "Status"};
         String[] clms = {"id", "patient_fname", "patient_lname", "email", "address", "status"};
 
         config conf = new config();
-        conf.viewDHP(qry, hdrs, clms);
+        conf.viewpatient(qry, hdrs, clms);
     }
     
-    private void updateDHP() {
+    private void updatepatient() {
+      
         Scanner sc = new Scanner(System.in);
+        config conf = new config();
         System.out.print("Enter the ID to Update: ");
-        int id = sc.nextInt();
-        sc.nextLine();  // Consume newline
-
-        System.out.print("New First Name: ");
+        int pid = sc.nextInt();
+        
+        while(conf.getSingleValue("SELECT id FROM tbl_patients WHERE id = ?",pid)== 0){
+            System.out.println("Selected ID doesn't exist");
+            System.out.println("Select Patient ID again!!: ");
+            pid=sc.nextInt();
+      }
+        sc.nextLine(); 
+        System.out.print("\nNew First Name: ");
         String nfname = sc.nextLine();
         System.out.print("New Last Name: ");
         String nlname = sc.nextLine();
@@ -96,17 +103,17 @@ public class DHP{
         String nstatus = sc.nextLine();
 
         String qry = "UPDATE tbl_patients SET patient_fname = ?, patient_lname = ?, email = ?, address = ?, status = ? WHERE id = ?";
-        config conf = new config();
-        conf.updateDHP(qry, nfname, nlname, nemail, naddress, nstatus, id);
+        
+        conf.updatepatient(qry, nfname, nlname, nemail, naddress, nstatus, pid);
     }
     
-    private void deleteDHP() {
+    private void deletepatient() {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the ID to Delete: ");
         int id = sc.nextInt();
 
         String qry = "DELETE FROM tbl_patients WHERE id = ?";
         config conf = new config();
-        conf.deleteDHP(qry, id);
+        conf.deletepatient(qry, id);
     }
 }
