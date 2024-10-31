@@ -29,6 +29,10 @@ public class mainapp {
                     mdoctor md = new mdoctor();
                     md.mdInformation();
                     break;
+                case 3:
+                    diagnosis pd = new diagnosis(); 
+                    pd.dInformation();
+                    break;
 
                 case 4:
                     System.out.println("Exiting...... type 'yes' kung ayaw mo na: ");

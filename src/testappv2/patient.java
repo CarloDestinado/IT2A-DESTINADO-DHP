@@ -72,7 +72,7 @@ public class patient{
         conf.addpatient(sql, fname, lname, email, address, status);
     }
     
-    private void viewpatient() {
+    public void viewpatient() {
         String qry = "SELECT * FROM tbl_patients";
         String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Address", "Status"};
         String[] clms = {"p_id", "patient_fname", "patient_lname", "email", "address", "status"};

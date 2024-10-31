@@ -69,7 +69,7 @@ public class mdoctor {
 
            conf.addpatient(sql, name, specialty, email, phone);
         }
-        private void viewdoctor() {
+        public void viewdoctor() {
             String qry = "SELECT * FROM tbl_medical_doctor";
             String[] hdrs = {"ID", "Doctor", "Specialty", "Email", "Phone No."};
             String[] clms = {"md_id", "md_name", "md_specialty", "md_email", "md_phone"};
