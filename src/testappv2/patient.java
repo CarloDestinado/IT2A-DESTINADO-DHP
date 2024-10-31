@@ -11,7 +11,10 @@ public class patient{
         patient test = new patient(); 
 
         do {
-            System.out.println("1. ADD PATIENT");
+            System.out.println("-----------------------");
+            System.out.println("--PATIENT INFORMATION--");
+            System.out.println("-----------------------");
+            System.out.println("\n1. ADD PATIENT");
             System.out.println("2. VIEW PATIENT");
             System.out.println("3. UPDATE PATIENT");
             System.out.println("4. DELETE PATIENT");
@@ -72,7 +75,7 @@ public class patient{
     private void viewpatient() {
         String qry = "SELECT * FROM tbl_patients";
         String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Address", "Status"};
-        String[] clms = {"id", "patient_fname", "patient_lname", "email", "address", "status"};
+        String[] clms = {"p_id", "patient_fname", "patient_lname", "email", "address", "status"};
 
         config conf = new config();
         conf.viewpatient(qry, hdrs, clms);
@@ -85,7 +88,7 @@ public class patient{
         System.out.print("Enter the ID to Update: ");
         int pid = sc.nextInt();
         
-        while(conf.getSingleValue("SELECT id FROM tbl_patients WHERE id = ?",pid)== 0){
+        while(conf.getSingleValue("SELECT p_id FROM tbl_patients WHERE p_id = ?",pid)== 0){
             System.out.println("Selected ID doesn't exist");
             System.out.println("Select Patient ID again!!: ");
             pid=sc.nextInt();
@@ -102,7 +105,7 @@ public class patient{
         System.out.print("New Status: ");
         String nstatus = sc.nextLine();
 
-        String qry = "UPDATE tbl_patients SET patient_fname = ?, patient_lname = ?, email = ?, address = ?, status = ? WHERE id = ?";
+        String qry = "UPDATE tbl_patients SET patient_fname = ?, patient_lname = ?, email = ?, address = ?, status = ? WHERE p_id = ?";
         
         conf.updatepatient(qry, nfname, nlname, nemail, naddress, nstatus, pid);
     }
@@ -112,7 +115,7 @@ public class patient{
         System.out.print("Enter the ID to Delete: ");
         int id = sc.nextInt();
 
-        String qry = "DELETE FROM tbl_patients WHERE id = ?";
+        String qry = "DELETE FROM tbl_patients WHERE p_id = ?";
         config conf = new config();
         conf.deletepatient(qry, id);
     }

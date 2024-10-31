@@ -12,9 +12,9 @@ public class mainapp {
         do{
             System.out.println("---WELCOME TO DIAGNOSIS HEALTH PROFILE---");
             System.out.println("-----------------------------------------");
-            System.out.println("\n1. PATIENT RECODRS");
-            System.out.println("2. PATIENT DIAGNOSIS");
-            System.out.println("3. MEDICAL DOCTOR");
+            System.out.println("\n1. PATIENT INFORMATION");
+            System.out.println("2. MEDICAL DOCTOR");
+            System.out.println("3. PATIENT DIAGNOSIS");
             System.out.println("4. EXIT");
 
             System.out.println("Enter Action: ");
@@ -24,6 +24,10 @@ public class mainapp {
                 case 1:
                     patient cs = new patient();
                     cs.pinformation();
+                    break; 
+                case 2: 
+                    mdoctor md = new mdoctor();
+                    md.mdInformation();
                     break;
 
                 case 4:
