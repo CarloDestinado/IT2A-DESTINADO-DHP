@@ -82,7 +82,7 @@ public class diagnosis {
                  MDid = sc.nextInt();
         }
          System.out.print("\nEnter Symptoms: ");
-         
+         String symptoms = sc.nextLine();
            
      LocalDate currdate = LocalDate.now();
       DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
