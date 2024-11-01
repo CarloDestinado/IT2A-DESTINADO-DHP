@@ -16,8 +16,8 @@ public class mainapp {
             System.out.println("2. MEDICAL DOCTOR");
             System.out.println("3. PATIENT DIAGNOSIS");
             System.out.println("4. EXIT");
-
-            System.out.println("Enter Action: ");
+           
+            System.out.println("\nEnter Action: ");
             int action = sc.nextInt();
 
             switch(action){

@@ -38,6 +38,7 @@ public class mdoctor {
                     md.updatedoctor();
                     break;
                 case 4:
+                    md.viewdoctor();
                     md.deletedoctor();
                     break;
                 case 5:
@@ -109,7 +110,7 @@ public class mdoctor {
             System.out.print("Enter the ID to Delete: ");
             int id = sc.nextInt();
 
-            String qry = "DELETE FROM tbl_patients WHERE p_id = ?";
+            String qry = "DELETE FROM tbl_medical_doctor WHERE md_id = ?";
             config conf = new config();
             conf.deletepatient(qry, id);
         }

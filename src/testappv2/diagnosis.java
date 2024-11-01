@@ -30,15 +30,18 @@ public class diagnosis {
             switch (action) {
                 case 1:
                     pd.addDiagnosis();
+                    pd.viewDiagnosis(); 
                     break;
                 case 2:
-                    
+                    pd.viewDiagnosis(); 
                     break;
                 case 3:
-                    
+                    pd.viewDiagnosis(); 
+                    pd.updatediagnosis();   
                     break;
                 case 4:
-                    
+                    pd.viewDiagnosis(); 
+                    pd.deleteDiagnosis();
                     break;
                 case 5:
                     System.out.println("Exiting...");
@@ -78,8 +81,8 @@ public class diagnosis {
             System.out.println("Doctor Doesn't Exist, Enter Again: ");
                  MDid = sc.nextInt();
         }
-         System.out.print("\nEnter Diagnosis: ");
-            String diag = sc.nextLine();
+         System.out.print("\nEnter Symptoms: ");
+         
            
      LocalDate currdate = LocalDate.now();
       DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -87,11 +90,48 @@ public class diagnosis {
       
       String treatment = "ON GOING";
       
-      String sql = "INSERT INTO tbl_diagnosis(p_id, md_id, d_symptoms, d_date, d_treatment) VALUES (?, ?, ?, ?, ?6)";
-      conf.addpatient(sql, Pid, MDid, diag, date, treatment);
-            System.out.println("Added Successfully...");
+      String sql = "INSERT INTO tbl_diagnosis(p_id, md_id, d_symptoms, d_date, d_treatment) VALUES (?, ?, ?, ?, ?)";
+      conf.addpatient(sql, Pid, MDid, symptoms, date, treatment);
+            
+      System.out.println("Added Successfully...");
       
     }
+        public void viewDiagnosis() {
+        String qry = "SELECT d_id, patient_fname, md_name, d_symptoms, d_date, d_treatment  FROM tbl_diagnosis "
+                + "LEFT JOIN tbl_patients ON tbl_patients.p_id = tbl_diagnosis.p_id"
+                + " LEFT JOIN tbl_medical_doctor ON tbl_medical_doctor.md_id = tbl_diagnosis.md_id ";
+        
+        String[] hdrs = {"ID", "Patient ", "Doctor ", "Symptoms", "Date", "Treatment"};
+        String[] clms = {"d_id", "patient_fname", "md_name", "d_symptoms", "d_date", "d_treatment"};
+
+        config conf = new config();
+        conf.viewpatient(qry, hdrs, clms);
+        
+        }
+        
+        public void updatediagnosis(){
+        
+            Scanner sc = new Scanner (System.in);
+            config conf = new config();
+            System.out.print("Enter the ID to Update: ");
+            int did = sc.nextInt();
+            
+            while(conf.getSingleValue("SELECT d_id FROM tbl_diagnosis WHERE d_id = ?",did)== 0){
+            System.out.println("Selected ID doesn't exist");
+            System.out.println("Select Patient ID again!!: ");
+            did=sc.nextInt();
+        }
+            
+        }
+        private void deleteDiagnosis() {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Enter the ID to Delete: ");
+            int did = sc.nextInt();
+
+            String qry = "DELETE FROM tbl_diagnosis WHERE d_id = ?";
+            config conf = new config();
+            conf.deletepatient(qry, did);
+        }
 }
 
     
