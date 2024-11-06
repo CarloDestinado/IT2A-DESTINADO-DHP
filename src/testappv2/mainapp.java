@@ -15,7 +15,8 @@ public class mainapp {
             System.out.println("\n1. PATIENT INFORMATION");
             System.out.println("2. MEDICAL DOCTOR");
             System.out.println("3. PATIENT DIAGNOSIS");
-            System.out.println("4. EXIT");
+            System.out.println("4. PATIENT PRESCRIPTION");
+            System.out.println("5. EXIT");
            
             System.out.println("\nEnter Action: ");
             int action = sc.nextInt();
@@ -33,8 +34,10 @@ public class mainapp {
                     diagnosis pd = new diagnosis(); 
                     pd.dInformation();
                     break;
-
                 case 4:
+                    prescription pres = new prescription();
+                    pres.pPrescription();
+                case 5:
                     System.out.println("Exiting...... type 'yes' kung ayaw mo na: ");
                     String resp = sc.next();
                     if(resp.equalsIgnoreCase("yes")){
