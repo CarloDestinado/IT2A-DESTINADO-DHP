@@ -35,8 +35,8 @@ public class mainapp {
                     pd.dInformation();
                     break;
                 case 4:
-                    prescription pres = new prescription();
-                    pres.pPrescription();
+                    prescription pr = new prescription();
+                    pr.pInformation();
                 case 5:
                     System.out.println("Exiting...... type 'yes' kung ayaw mo na: ");
                     String resp = sc.next();

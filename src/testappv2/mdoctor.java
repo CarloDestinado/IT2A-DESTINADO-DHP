@@ -1,16 +1,13 @@
-
 package testappv2;
 
 import java.util.Scanner;
 
-
 public class mdoctor {
-    public void mdInformation(){
-    
-    Scanner sc = new Scanner(System.in);
+    public void mdInformation() {
+        Scanner sc = new Scanner(System.in);
         String resp;
-       
-        mdoctor md = new mdoctor(); 
+
+        mdoctor md = new mdoctor();
 
         do {
             System.out.println("------------------");
@@ -24,7 +21,7 @@ public class mdoctor {
 
             System.out.print("\nEnter Action: ");
             int action = sc.nextInt();
-            sc.nextLine();
+            sc.nextLine(); // Consume newline
 
             switch (action) {
                 case 1:
@@ -43,7 +40,7 @@ public class mdoctor {
                     break;
                 case 5:
                     System.out.println("Exiting...");
-                    return; 
+                    return;
                 default:
                     System.out.println("Invalid action. Please choose again.");
             }
@@ -53,68 +50,84 @@ public class mdoctor {
         } while (resp.equalsIgnoreCase("yes"));
 
         System.out.println("Thank You!");
-        }
-        public void adddoctor() {
-           Scanner sc = new Scanner(System.in);
-           config conf = new config();
-           System.out.print("\nDoctor Full Name: ");
-           String name = sc.nextLine();
-           System.out.print("Doctor Specialty: ");
-           String specialty = sc.nextLine();
-           System.out.print("Doctor Email: ");
-           String email = sc.nextLine();
-           System.out.print("Doctor Phone No.: ");
-           String phone = sc.nextLine();
-
-           String sql = "INSERT INTO tbl_medical_doctor(md_name, md_specialty, md_email, md_phone) VALUES (?, ?, ?, ?)";
-
-           conf.addpatient(sql, name, specialty, email, phone);
-        }
-        public void viewdoctor() {
-            String qry = "SELECT * FROM tbl_medical_doctor";
-            String[] hdrs = {"ID", "Doctor", "Specialty", "Email", "Phone No."};
-            String[] clms = {"md_id", "md_name", "md_specialty", "md_email", "md_phone"};
-
-            config conf = new config();
-            conf.viewpatient(qry, hdrs, clms);
-            }
-    
-        private void updatedoctor() {
-      
-            Scanner sc = new Scanner(System.in);
-            config conf = new config();
-            System.out.print("Enter the ID to Update: ");
-            int pid = sc.nextInt();
-
-            while(conf.getSingleValue("SELECT md_id FROM tbl_medical_doctor WHERE md_id = ?",pid)== 0){
-            System.out.println("Selected ID doesn't exist");
-            System.out.println("Select Patient ID again!!: ");
-            pid=sc.nextInt();
-        }
-            sc.nextLine(); 
-            System.out.print("\nNew Name (Full Name): ");
-            String nname = sc.nextLine();
-            System.out.print("New Specialty: ");
-            String nspecialty = sc.nextLine();
-            System.out.print("New Email: ");
-            String nemail = sc.nextLine();
-            System.out.print("New Phone No.: ");
-            String nphone = sc.nextLine();
-
-            String qry = "UPDATE tbl_medical_doctor SET md_name = ?, md_specialty = ?, md_email = ?, md_phone = ? WHERE md_name = ?";
-
-            conf.updatepatient(qry, nname, nspecialty, nemail, nphone, pid);
-        }
-        private void deletedoctor() {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter the ID to Delete: ");
-            int id = sc.nextInt();
-
-            String qry = "DELETE FROM tbl_medical_doctor WHERE md_id = ?";
-            config conf = new config();
-            conf.deletepatient(qry, id);
-        }
-            
     }
-            
 
+    public void adddoctor() {
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+
+        String name = getValidatedInput(sc, "Doctor Full Name: ");
+        String specialty = getValidatedInput(sc, "Doctor Specialty: ");
+        String email = getValidatedInput(sc, "Doctor Email: ");
+        String phone = getValidatedInput(sc, "Doctor Phone No.: ");
+
+        String sql = "INSERT INTO tbl_medical_doctor(md_name, md_specialty, md_email, md_phone) VALUES (?, ?, ?, ?)";
+
+        conf.addpatient(sql, name, specialty, email, phone);
+        System.out.println("Doctor added successfully.");
+    }
+
+    public void viewdoctor() {
+        String qry = "SELECT * FROM tbl_medical_doctor";
+        String[] hdrs = {"ID", "Doctor", "Specialty", "Email", "Phone No."};
+        String[] clms = {"md_id", "md_name", "md_specialty", "md_email", "md_phone"};
+
+        config conf = new config();
+        conf.viewpatient(qry, hdrs, clms);
+    }
+
+    private void updatedoctor() {
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+
+        System.out.print("Enter the ID to Update: ");
+        int pid = sc.nextInt();
+
+        while (conf.getSingleValue("SELECT md_id FROM tbl_medical_doctor WHERE md_id = ?", pid) == 0) {
+            System.out.println("Selected ID doesn't exist. Please enter a valid ID.");
+            System.out.print("Enter the ID to Update: ");
+            pid = sc.nextInt();
+        }
+        sc.nextLine(); // Consume newline
+
+        String nname = getValidatedInput(sc, "New Name (Full Name): ");
+        String nspecialty = getValidatedInput(sc, "New Specialty: ");
+        String nemail = getValidatedInput(sc, "New Email: ");
+        String nphone = getValidatedInput(sc, "New Phone No.: ");
+
+        String qry = "UPDATE tbl_medical_doctor SET md_name = ?, md_specialty = ?, md_email = ?, md_phone = ? WHERE md_id = ?";
+
+        conf.updatepatient(qry, nname, nspecialty, nemail, nphone, pid);
+        System.out.println("Doctor updated successfully.");
+    }
+
+    private void deletedoctor() {
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+
+        System.out.print("Enter the ID to Delete: ");
+        int id = sc.nextInt();
+
+        while (conf.getSingleValue("SELECT md_id FROM tbl_medical_doctor WHERE md_id = ?", id) == 0) {
+            System.out.println("Selected ID doesn't exist. Please enter a valid ID.");
+            System.out.print("Enter the ID to Delete: ");
+            id = sc.nextInt();
+        }
+
+        String qry = "DELETE FROM tbl_medical_doctor WHERE md_id = ?";
+        conf.deletepatient(qry, id);
+        System.out.println("Doctor deleted successfully.");
+    }
+
+    private String getValidatedInput(Scanner sc, String prompt) {
+        String input;
+        do {
+            System.out.print(prompt);
+            input = sc.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("This field cannot be empty. Please enter a valid value.");
+            }
+        } while (input.isEmpty());
+        return input;
+    }
+}
