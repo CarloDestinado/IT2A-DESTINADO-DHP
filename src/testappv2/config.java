@@ -207,10 +207,5 @@ public void deletepatient(String sql, Object... values) {
         }
         return result;
     }
-
-    void viewpatient(String qry, String[] hdrs, String[] clms, int Pid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
     
 }

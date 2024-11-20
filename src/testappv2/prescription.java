@@ -4,12 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class prescription {
+public class Prescription {
+
     public void pInformation() {
         Scanner sc = new Scanner(System.in);
         String resp;
-
-        prescription pr = new prescription();
 
         do {
             System.out.println("---------------------");
@@ -26,23 +25,15 @@ public class prescription {
             sc.nextLine(); // Consume newline
 
             switch (action) {
-                case 1:
-                    pr.searchAndAddPrescription();
-                    break;
-                case 2:
-                    pr.searchAndViewPrescription();
-                    break;
-                case 3:
-                    pr.updatePrescription();
-                    break;
-                case 4:
-                    pr.deletePrescription();
-                    break;
-                case 5:
+                case 1 -> AddPrescription();
+                case 2 -> ViewPrescription();
+                case 3 -> updatePrescription();
+                case 4 -> deletePrescription();
+                case 5 -> {
                     System.out.println("Exiting...");
                     return;
-                default:
-                    System.out.println("Invalid action. Please choose again.");
+                }
+                default -> System.out.println("Invalid action. Please choose again.");
             }
 
             System.out.print("Continue? (yes/no): ");
@@ -52,11 +43,11 @@ public class prescription {
         System.out.println("Thank You!");
     }
 
-    public void searchAndAddPrescription() {
+    public void AddPrescription() {
         Scanner sc = new Scanner(System.in);
-        config conf = new config();
-        patient cs = new patient();
-        cs.viewpatient();
+        Config conf = new Config();
+        Patient cs = new Patient();
+        cs.viewPatient();
 
         // Search for patient
         System.out.println("Enter ID of the Patient: ");
@@ -80,37 +71,37 @@ public class prescription {
         String date = currDate.format(format);
 
         String sql = "INSERT INTO tbl_prescription(p_id, prescription, p_date) VALUES (?, ?, ?)";
-        conf.addpatient(sql, Pid, symptoms, date);
+        conf.addPatient(sql, Pid, symptoms, date);
 
         System.out.println("Prescription Added Successfully for Patient ID: " + Pid);
     }
 
-    public void searchAndViewPrescription() {
+    public void ViewPrescription() {
         Scanner sc = new Scanner(System.in);
-        config conf = new config();
-        patient cs = new patient();
-        cs.viewpatient();
+        Config conf = new Config();
+        Patient cs = new Patient();
+        cs.viewPatient();
 
         System.out.println("Enter ID of the Patient to View Prescription: ");
         int Pid = sc.nextInt();
 
-        String qry = "SELECT p_id, patient_fname, md_name, p_symptoms, p_date, p_treatment FROM tbl_prescription "
-                + "LEFT JOIN tbl_patients ON tbl_patients.p_id = tbl_prescription.p_id "
-                + "LEFT JOIN tbl_medical_doctor ON tbl_medical_doctor.md_id = tbl_prescription.md_id "
-                + "WHERE tbl_prescription.p_id = ?";
+        String qry = "SELECT prescrip_ID, tbl_prescription.p_id, prescription, p_date " +
+                     "FROM tbl_prescription " +
+                     "LEFT JOIN tbl_patients ON tbl_patients.p_id = tbl_prescription.p_id " +
+                     "WHERE tbl_prescription.p_id = ?";
 
         if (conf.getSingleValue("SELECT p_id FROM tbl_prescription WHERE p_id = ?", Pid) == 0) {
             System.out.println("No prescription found for Patient ID: " + Pid);
         } else {
-            String[] hdrs = {"ID", "Patient", "Prescription", "Date"};
-            String[] clms = {"p_id", "patient_fname", "prescription", "p_date"};
-            conf.viewpatient(qry, hdrs, clms, Pid);
+            String[] hdrs = {"ID", "Patient ID", "Prescription", "Date"};
+            String[] clms = {"prescrip_ID", "p_id", "prescription", "p_date"};
+            conf.viewPatient(qry, hdrs, clms);
         }
     }
 
     public void updatePrescription() {
         Scanner sc = new Scanner(System.in);
-        config conf = new config();
+        Config conf = new Config();
 
         System.out.print("Enter the ID to Update: ");
         int pid = sc.nextInt();
@@ -120,8 +111,15 @@ public class prescription {
             pid = sc.nextInt();
         }
 
-        // Implement update logic here
-        System.out.println("Update logic not implemented yet.");
+        // Update prescription
+        sc.nextLine(); // Consume newline
+        System.out.print("Enter New Prescription: ");
+        String newPrescription = sc.nextLine();
+
+        String updateQry = "UPDATE tbl_prescription SET prescription = ? WHERE p_id = ?";
+        conf.updatePatient(updateQry, newPrescription, pid);
+
+        System.out.println("Prescription updated successfully.");
     }
 
     private void deletePrescription() {
@@ -130,8 +128,8 @@ public class prescription {
         int pid = sc.nextInt();
 
         String qry = "DELETE FROM tbl_prescription WHERE p_id = ?";
-        config conf = new config();
-        conf.deletepatient(qry, pid);
+        Config conf = new Config();
+        conf.deletePatient(qry, pid);
 
         System.out.println("Prescription deleted successfully.");
     }
