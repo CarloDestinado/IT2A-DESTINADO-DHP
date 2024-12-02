@@ -100,7 +100,7 @@ public class diagnosis {
         String qry = "SELECT d_id, patient_fname, md_name, d_symptoms, d_date, d_treatment  FROM tbl_diagnosis "
                 + "LEFT JOIN tbl_patients ON tbl_patients.p_id = tbl_diagnosis.p_id"
                 + " LEFT JOIN tbl_medical_doctor ON tbl_medical_doctor.md_id = tbl_diagnosis.md_id ";
-        
+                
         String[] hdrs = {"ID", "Patient ", "Doctor ", "Symptoms", "Date", "Treatment"};
         String[] clms = {"d_id", "patient_fname", "md_name", "d_symptoms", "d_date", "d_treatment"};
 
