@@ -68,8 +68,14 @@ public class prescription {
         System.out.println("Patient Found!");
 
         sc.nextLine(); // Consume newline
-        System.out.print("Enter Symptoms: ");
-        String symptoms = sc.nextLine();
+        String symptoms;
+        do {
+            System.out.print("Enter Symptoms: ");
+            symptoms = sc.nextLine().trim(); // Trim to remove leading/trailing spaces
+            if (symptoms.isEmpty()) {
+                System.out.println("Symptoms cannot be blank. Please enter valid symptoms.");
+            }
+        } while (symptoms.isEmpty()); // Keep asking if input is blank
 
         String sql = "INSERT INTO tbl_prescription(p_id, prescription) VALUES (?, ?)";
         conf.addpatient(sql, Pid, symptoms);
@@ -86,9 +92,7 @@ public class prescription {
 
         config conf = new config();
         conf.viewpatient(qry, hdrs, clms);
-       
     }
-
 
     public void updatePrescription() {
         Scanner sc = new Scanner(System.in);
@@ -103,8 +107,14 @@ public class prescription {
         }
 
         sc.nextLine(); // Consume newline
-        System.out.print("Enter new prescription details: ");
-        String newDetails = sc.nextLine();
+        String newDetails;
+        do {
+            System.out.print("Enter new prescription details: ");
+            newDetails = sc.nextLine().trim(); // Trim to remove leading/trailing spaces
+            if (newDetails.isEmpty()) {
+                System.out.println("Prescription details cannot be blank. Please enter valid details.");
+            }
+        } while (newDetails.isEmpty()); // Keep asking if input is blank
 
         String qry = "UPDATE tbl_prescription SET prescription = ? WHERE p_id = ?";
         conf.updatepatient(qry, newDetails, pid);
@@ -115,7 +125,7 @@ public class prescription {
     public void deletePrescription() {
         Scanner sc = new Scanner(System.in);
         config conf = new config();
-  
+
         System.out.print("Enter the ID to Delete: ");
         int pid = sc.nextInt();
 
