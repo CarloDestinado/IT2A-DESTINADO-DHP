@@ -1,7 +1,5 @@
 package testappv2;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class prescription {
@@ -35,6 +33,7 @@ public class prescription {
                     updatePrescription();
                     break;
                 case 4:
+                    searchAndViewPrescription();
                     deletePrescription();
                     break;
                 case 5:
@@ -72,23 +71,22 @@ public class prescription {
         System.out.print("Enter Symptoms: ");
         String symptoms = sc.nextLine();
 
-        LocalDate currDate = LocalDate.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        String date = currDate.format(format);
-
-        String sql = "INSERT INTO tbl_prescription(p_id, prescription, p_date) VALUES (?, ?, ?)";
-        conf.addpatient(sql, Pid, symptoms, date);
+        String sql = "INSERT INTO tbl_prescription(p_id, prescription) VALUES (?, ?)";
+        conf.addpatient(sql, Pid, symptoms);
 
         System.out.println("Prescription Added Successfully for Patient ID: " + Pid);
     }
 
     public void searchAndViewPrescription() {
-        String qry = "SELECT * FROM tbl_prescription";
-        String[] hdrs = {"PRESCRIPTION ID", "Patient NAME", "PRESCIPTION"};
+        String qry = "SELECT prescrip_ID, patient_fname, prescription  FROM tbl_prescription "
+                + "LEFT JOIN tbl_patients ON tbl_patients.p_id = tbl_prescription.p_id";
+                
+        String[] hdrs = {" ID ", " Patient ", " Prescription "};
         String[] clms = {"prescrip_ID", "patient_fname", "prescription"};
 
         config conf = new config();
         conf.viewpatient(qry, hdrs, clms);
+       
     }
 
 
@@ -121,7 +119,7 @@ public class prescription {
         System.out.print("Enter the ID to Delete: ");
         int pid = sc.nextInt();
 
-        String qry = "DELETE FROM tbl_prescription WHERE p_id = ?";
+        String qry = "DELETE FROM tbl_prescription WHERE prescrip_ID = ?";
         conf.deletepatient(qry, pid);
 
         System.out.println("Prescription deleted successfully for Patient ID: " + pid);

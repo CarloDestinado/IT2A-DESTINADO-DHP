@@ -57,22 +57,21 @@ public class patient {
         Scanner sc = new Scanner(System.in);
         config conf = new config();
 
-        String fname = getValidatedInput(sc, "Patient First Name: ");
-        String lname = getValidatedInput(sc, "Patient Last Name: ");
+        String fname = getValidatedInput(sc, "Patient Full Name: ");
         String email = getValidatedInput(sc, "Patient Email: ");
         String address = getValidatedInput(sc, "Patient Address: ");
         String status = getValidatedInput(sc, "Patient Status: ");
 
-        String sql = "INSERT INTO tbl_patients(patient_fname, patient_lname, email, address, status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tbl_patients(patient_fname, email, address, status) VALUES (?, ?, ?, ?)";
 
-        conf.addpatient(sql, fname, lname, email, address, status);
+        conf.addpatient(sql, fname, email, address, status);
         System.out.println("Patient added successfully.");
     }
 
     public void viewpatient() {
         String qry = "SELECT * FROM tbl_patients";
-        String[] hdrs = {"ID", "First Name", "Last Name", "Email", "Address", "Status"};
-        String[] clms = {"p_id", "patient_fname", "patient_lname", "email", "address", "status"};
+        String[] hdrs = {"ID", "First Name", "Email", "Address", "Status"};
+        String[] clms = {"p_id", "patient_fname", "email", "address", "status"};
 
         config conf = new config();
         conf.viewpatient(qry, hdrs, clms);
@@ -94,14 +93,13 @@ public class patient {
         }
 
         String nfname = getValidatedInput(sc, "New First Name: ");
-        String nlname = getValidatedInput(sc, "New Last Name: ");
         String nemail = getValidatedInput(sc, "New Email: ");
         String naddress = getValidatedInput(sc, "New Address: ");
         String nstatus = getValidatedInput(sc, "New Status: ");
 
-        String qry = "UPDATE tbl_patients SET patient_fname = ?, patient_lname = ?, email = ?, address = ?, status = ? WHERE p_id = ?";
+        String qry = "UPDATE tbl_patients SET patient_fname = ?, email = ?, address = ?, status = ? WHERE p_id = ?";
 
-        conf.updatepatient(qry, nfname, nlname, nemail, naddress, nstatus, pid);
+        conf.updatepatient(qry, nfname, nemail, naddress, nstatus, pid);
         System.out.println("Patient updated successfully.");
     }
 
